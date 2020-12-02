@@ -1,61 +1,56 @@
 <template>
     <div>
 
-        <div class="columns is-centered">
-            <div class="column is-half">
-                <h2 id="title">Listagem de usuários</h2>
-                <div class="table-container">        
-                    <table class="table is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>NOME</th>
-                                <th>EMAIL</th>
-                                <th>CARGO</th>
-                                <th>AÇÕES</th>
-                            </tr>    
-                        </thead>
-                        <tbody>
-                            <tr v-for="user in users" :key="user.id">
-                                <td>{{user.id}}</td>
-                                <td>{{user.name}}</td>
-                                <td>{{user.email}}</td>
-                                <!-- pipe -->
-                                <td>{{ user.role | transformCodeRole}}</td>
-                                <td>
-                                    <button class="btn button is-danger" @click="showMod(user.id)">DELETAR</button>   
-                                    <router-link :to="{name: 'UserEdit', params: {id: user.id}}"><button class="button is-warning">EDITAR</button></router-link>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="container">
+            <div class="row">
+                <div class="col-md col-12">
+                    <h2 id="title">Listagem de usuários</h2>
+                    <div class="table-container">        
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NOME</th>
+                                    <th>EMAIL</th>
+                                    <th>CARGO</th>
+                                    <th>AÇÕES</th>
+                                </tr>    
+                            </thead>
+                            <tbody>
+                                <tr v-for="user in users" :key="user.id">
+                                    <td>{{user.id}}</td>
+                                    <td>{{user.name}}</td>
+                                    <td>{{user.email}}</td>
+                                    <!-- pipe -->
+                                    <td>{{ user.role | transformCodeRole}}</td>
+                                    <td>
+                                        <button class="btn button btn-danger" data-toggle="modal" data-target="#modalExemplo" @click="showMod(user.id)">DELETAR</button>   
+                                        <router-link :to="{name: 'UserEdit', params: {id: user.id}}"><button class="btn button btn-warning">EDITAR</button></router-link>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                    <div :class="{modal: true, 'is-active': showModal}">
-                        <div class="modal-background"></div>
-                            <div class="modal-content">
-                                <div class="card">
-                                    <header class="card-header">
-                                        <p class="card-header-title">
-                                        Deletar usuário
-                                        </p>
-                                        <a href="#" class="card-header-icon" aria-label="more options">
-                                        <span class="icon">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                        </a>
-                                    </header>
-                                    <div class="card-content">
-                                        <div class="content">
-                                            Você realmente deseja deletar este usuário?
-                                        </div>
-                                    </div>
-                                    <footer class="card-footer">
-                                        <a href="#" class="card-footer-item" @click="hideModal()">Cancelar</a>
-                                        <a href="#" class="card-footer-item" @click="deleteUser()">Continuar</a>
-                                    </footer>
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Excluir usuário</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Deseja realmente excluir este usuário?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-primary" @click="deleteUser()">Salvar mudanças</button>
+                                </div>
                                 </div>
                             </div>
-                        <button class="modal-close is-large" aria-label="close" @click="hideModal()"></button>
+                        </div>  
                     </div>
                 </div>
             </div>
@@ -84,7 +79,7 @@ export default {
     data(){
         return {
             users: [],
-            showModal: false,
+            // showModal: false,
             delUser: 0
         }
     },
@@ -98,14 +93,13 @@ export default {
         }
     },
     methods:{
-        hideModal(){
-            this.showModal = false;
-        },
+        // hideModal(){
+        //     this.showModal = false;
+        // },
         showMod(id){
             this.delUser = id
-            this.showModal = true;
-            
         },
+       
         deleteUser(){
 
             var req = {
@@ -114,9 +108,7 @@ export default {
                 }
             }
 
-            axios.delete(`http://localhost:8686/user/${this.delUser}`,req).then( res => {
-                console.log(res);
-                this.showModal = false;
+            axios.delete(`http://localhost:8686/user/${this.delUser}`,req).then( () => {
                 this.users = this.users.filter(u => u.id != this.delUser);
             }).catch(err => {
                 console.log(err);

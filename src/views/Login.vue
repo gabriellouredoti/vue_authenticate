@@ -1,16 +1,18 @@
 <template>
-    <div class="columns is-centered">
-        <div class="column is-half">
-            <div v-if="error != undefined">
-                <div class="notification is-danger">
+    <div class="container">
+        <div class="row">
+            <div class="col-md col12 form">
+                <div v-if="error != undefined">
+                <div class="alert alert-danger">
                     {{error}}
                 </div>
             </div>
             <br>
             <h2 id="login">Acesso restrito</h2>
-            <input class="input is-medium" type="email" name="email" id="email" placeholder="exemplo@dominio.com" v-model="email">  
-            <input class="input is-medium" type="password" name="password" id="password" placeholder="******" v-model="password">  
-            <button class="button is-success is-medium is-fullwidth" @click="login">Entrar</button> 
+            <input class="form-control in" type="email" name="email" id="email" placeholder="exemplo@dominio.com" v-model="email">  
+            <input class="form-control in" type="password" name="password" id="password" placeholder="******" v-model="password">  
+            <button class="btn btn-success" @click="login">Entrar</button>
+            </div> 
         </div>
     </div>
       
@@ -50,8 +52,22 @@ export default {
         font-size: 30px;
     }
 
-    .input{
-        margin-bottom: 2%;
+    div > input.in{
+        margin-bottom: 1% !important;
+        max-width: 50% !important;
+        margin: auto;
+        height: 50px;
     }
+
+    div > .form button.btn{
+        width: 50%;
+        height: 50px;
+    }
+
+    div.form .alert{
+        max-width: 50%;
+        margin: auto;
+    }
+
 
 </style>
